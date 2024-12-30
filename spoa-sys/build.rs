@@ -35,7 +35,7 @@ fn main() {
     println!("cargo:rerun-if-changed=src/lib.rs");
 
     cxx_build::bridge("src/lib.rs")
-        .flag("-std=c++11")
         .file("src/bindings.cpp")
+        .std("c++17")
         .compile("spoa_sys");
 }

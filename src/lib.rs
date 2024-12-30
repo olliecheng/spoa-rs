@@ -123,6 +123,14 @@ impl Graph {
         CString::from_vec_with_nul(buf).unwrap()
     }
 
+    /// Generate a consenus sequence from the partial order `Graph` while
+    /// also returning the quality score. The quality score at each base is
+    /// the highest observed basecalled PHRED quality score of any of the
+    /// aligned bases.
+    pub fn consensus_with_quality(&mut self) -> ffi::ConsensusQ {
+        ffi::generate_consensus_with_quality(self.0.pin_mut())
+    }
+
     /// Generate a multiple sequence alignment for all sequences added to the `Graph`.
     ///
     /// If `include_consensus` is provided, the consensus sequence is provided, also aligned, at
@@ -174,6 +182,15 @@ mod tests {
         "AATGCTCGTT".as_bytes(),
     ];
 
+    const SMALL_SEQS_QUALS: &[&[u8]] = &[
+        "!(0C<\"<%1I\0".as_bytes(),
+        "I%5C%5.+7\0".as_bytes(),
+        "GI#;%AD(*(\0".as_bytes(),
+        ">78':*4CG3\0".as_bytes(),
+        "1&%'19*<9/\0".as_bytes(),
+        ">2F-+$;!9-\0".as_bytes()
+    ];
+
     #[test]
     fn consensus_small() {
         let mut eng = AlignmentEngine::new(AlignmentType::kNW, 5, -4, -3, -1, -3, -1);
@@ -191,6 +208,24 @@ mod tests {
 
         let consensus = graph.consensus();
         assert!(consensus.as_bytes() == b"AATGCCCGTT");
+    }
+
+    #[test]
+    fn consensus_small_quality() {
+        let mut eng = AlignmentEngine::new(AlignmentType::kNW, 5, -4, -3, -1, -3, -1);
+        let mut graph = Graph::new();
+
+        for (index, seq) in SMALL_SEQS.iter().enumerate() {
+            let qual =
+                CStr::from_bytes_with_nul(SMALL_SEQS_QUALS[index]).unwrap();
+            let aln = eng.align(seq, &graph);
+
+            graph.add_alignment(&aln, seq, &qual);
+        }
+
+        let consensus = graph.consensus_with_quality();
+        assert_eq!(consensus.sequence.as_bytes(), b"AATGCCCGTT");
+        assert_eq!(consensus.quality.as_bytes(), b"IIFC<ADCGI");
     }
 
     #[test]

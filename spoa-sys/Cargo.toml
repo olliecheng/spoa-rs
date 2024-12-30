@@ -13,9 +13,9 @@ default = []
 simde = []
 
 [dependencies]
-cxx = "1.0"
+cxx = "1.0.136"
 
 [build-dependencies]
 cmake = "0.1"
-cxx-build = "1.0"
+cxx-build = "1.0.136"
 walkdir = "2"

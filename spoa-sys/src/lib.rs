@@ -11,6 +11,11 @@ pub mod ffi {
         kOV,
     }
 
+    struct ConsensusQ {
+        pub sequence: String,
+        pub quality: String,
+    }
+
     unsafe extern "C++" {
         include!("spoa-sys/include/bindings.hpp");
 
@@ -31,6 +36,7 @@ pub mod ffi {
             quality_len: u32,
         );
         fn generate_consensus(graph: Pin<&mut Graph>) -> UniquePtr<CxxString>;
+        fn generate_consensus_with_quality(graph: Pin<&mut Graph>) -> ConsensusQ;
         fn generate_multiple_sequence_alignment(
             graph: Pin<&mut Graph>,
             include_consensus: bool,
