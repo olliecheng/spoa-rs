@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "spoa-sys/include/bindings.hpp"
+#include "spoa-sys/src/lib.rs.h"
 
 namespace spoa {
 
@@ -31,6 +32,13 @@ void add_alignment(Graph &graph, const Alignment &alignment,
 std::unique_ptr<std::string> generate_consensus(Graph &graph) {
   std::string consensus = graph.GenerateConsensus();
   return std::unique_ptr<std::string>(new std::string(std::move(consensus)));
+}
+
+ConsensusQ generate_consensus_with_quality(spoa::Graph &graph) {
+  auto [consensus, quality] = graph.GenerateConsensusWithQuality(0);
+  return spoa::ConsensusQ {
+    std::move(consensus), std::move(quality)
+  };
 }
 
 std::unique_ptr<std::vector<std::string>>

@@ -1,12 +1,21 @@
 #pragma once
 
+#include "rust/cxx.h"
+
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "spoa-sys/spoa/include/spoa/spoa.hpp"
 
+
 namespace spoa {
+
+//struct ConsensusQ {
+//  std::unique_ptr<std::string> sequence;
+//  std::unique_ptr<std::string> quality;
+//};
+struct ConsensusQ;
 
 std::unique_ptr<spoa::AlignmentEngine>
 create_alignment_engine(spoa::AlignmentType type, std::int8_t m, std::int8_t n,
@@ -25,6 +34,7 @@ void add_alignment(spoa::Graph &graph, const spoa::Alignment &alignment,
                    const char *quality, std::uint32_t quality_len);
 
 std::unique_ptr<std::string> generate_consensus(spoa::Graph &graph);
+ConsensusQ generate_consensus_with_quality(spoa::Graph &graph);
 
 std::unique_ptr<std::vector<std::string> >
 generate_multiple_sequence_alignment(spoa::Graph &graph,
