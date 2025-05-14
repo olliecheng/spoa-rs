@@ -61,7 +61,12 @@ impl Graph {
     ///
     /// The `alignment` should be derived from calling `AlignmentEngine::align` with the
     /// `sequence`.
-    pub fn add_alignment(&mut self, alignment: &Alignment, sequence: &CStr, quality: &CStr) {
+    pub fn add_alignment(
+        &mut self,
+        alignment: &Alignment,
+        sequence: &CStr,
+        quality: &CStr,
+    ) -> ffi::AlignmentResult {
         let sequence_len = u32::try_from(sequence.to_bytes().len()).unwrap();
         let quality_len = u32::try_from(quality.to_bytes().len()).unwrap();
         assert!(sequence_len == quality_len);
@@ -87,7 +92,7 @@ impl Graph {
         alignment: &Alignment,
         sequence: &[u8],
         quality: &[u8],
-    ) {
+    ) -> ffi::AlignmentResult {
         let sequence_len = sequence
             .len()
             .try_into()
@@ -188,7 +193,7 @@ mod tests {
         "GI#;%AD(*(\0".as_bytes(),
         ">78':*4CG3\0".as_bytes(),
         "1&%'19*<9/\0".as_bytes(),
-        ">2F-+$;!9-\0".as_bytes()
+        ">2F-+$;!9-\0".as_bytes(),
     ];
 
     #[test]
@@ -216,8 +221,7 @@ mod tests {
         let mut graph = Graph::new();
 
         for (index, seq) in SMALL_SEQS.iter().enumerate() {
-            let qual =
-                CStr::from_bytes_with_nul(SMALL_SEQS_QUALS[index]).unwrap();
+            let qual = CStr::from_bytes_with_nul(SMALL_SEQS_QUALS[index]).unwrap();
             let aln = eng.align(seq, &graph);
 
             graph.add_alignment(&aln, seq, &qual);
