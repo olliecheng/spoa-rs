@@ -37,9 +37,11 @@ namespace spoa
         alignment, sequence, sequence_len, quality, quality_len);
 
     // move to the Rust typed struct
-    return spoa::AlignmentResult{.new_nodes = res.new_nodes,
-                                 .valid_nodes = res.valid_nodes,
-                                 .sequence_len = res.sequence_len};
+    return spoa::AlignmentResult{
+        .new_nodes = res.new_nodes,
+        .sequence_len = res.sequence_len,
+        .valid_nodes = res.valid_nodes,
+    };
   }
 
   std::unique_ptr<std::string> generate_consensus(Graph &graph)
