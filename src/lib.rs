@@ -1,7 +1,9 @@
 use spoa_sys::ffi;
 use std::ffi::{c_char, CStr, CString};
 
+pub use ffi::AlignmentResult;
 pub use ffi::AlignmentType;
+pub use ffi::ConsensusQ;
 
 /// An opaque struct containing an alignment of a sequence to a `Graph`
 pub struct Alignment(cxx::UniquePtr<ffi::Alignment>);
