@@ -31,6 +31,11 @@ namespace spoa
                                 std::uint32_t sequence_len, const char *quality,
                                 std::uint32_t quality_len);
 
+  AlignmentResult predict_alignment(spoa::Graph &graph,
+                                    const spoa::Alignment &alignment,
+                                    const char *sequence,
+                                    std::uint32_t sequence_len);
+
   std::unique_ptr<std::string> generate_consensus(spoa::Graph &graph);
   ConsensusQ generate_consensus_with_quality(spoa::Graph &graph);
 

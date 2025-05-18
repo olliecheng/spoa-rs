@@ -17,7 +17,7 @@ pub mod ffi {
         pub quality: String,
     }
 
-    #[derive(Copy, Clone, Debug)]
+    #[derive(Copy, Clone, Debug, PartialEq)]
     struct AlignmentResult {
         pub new_nodes: u32,
         pub sequence_len: u32,
@@ -42,6 +42,13 @@ pub mod ffi {
             sequence_len: u32,
             quality: *const c_char,
             quality_len: u32,
+        ) -> AlignmentResult;
+
+        unsafe fn predict_alignment(
+            graph: Pin<&mut Graph>,
+            alignment: &Alignment,
+            sequence: *const c_char,
+            sequence_len: u32,
         ) -> AlignmentResult;
 
         fn generate_consensus(graph: Pin<&mut Graph>) -> UniquePtr<CxxString>;

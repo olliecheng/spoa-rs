@@ -118,6 +118,43 @@ impl Graph {
         }
     }
 
+    pub fn predict_alignment(
+        &mut self,
+        alignment: &Alignment,
+        sequence: &CStr,
+    ) -> ffi::AlignmentResult {
+        let sequence_len = u32::try_from(sequence.to_bytes().len()).unwrap();
+
+        unsafe {
+            ffi::predict_alignment(
+                self.0.pin_mut(),
+                alignment.0.as_ref().unwrap(),
+                sequence.as_ptr(),
+                sequence_len,
+            )
+        }
+    }
+
+    pub fn predict_alignment_from_bytes(
+        &mut self,
+        alignment: &Alignment,
+        sequence: &[u8],
+    ) -> AlignmentResult {
+        let sequence_len = sequence
+            .len()
+            .try_into()
+            .expect("Sequence length does not fit into a u32");
+
+        unsafe {
+            ffi::predict_alignment(
+                self.0.pin_mut(),
+                alignment.0.as_ref().unwrap(),
+                sequence.as_ptr() as *const c_char,
+                sequence_len,
+            )
+        }
+    }
+
     /// Generate a consenus sequence from the partial order `Graph`.
     pub fn consensus(&mut self) -> CString {
         let mut buf = Vec::from(

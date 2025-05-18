@@ -44,6 +44,21 @@ namespace spoa
     };
   }
 
+  AlignmentResult predict_alignment(Graph &graph, const Alignment &alignment,
+                                    const char *sequence,
+                                    std::uint32_t sequence_len)
+  {
+    Graph::AlignmentResult prediction =
+        graph.PredictAlignment(alignment, sequence, sequence_len);
+
+    // move to the Rust typed struct
+    return spoa::AlignmentResult{
+        .new_nodes = prediction.new_nodes,
+        .sequence_len = prediction.sequence_len,
+        .valid_nodes = prediction.valid_nodes,
+    };
+  }
+
   std::unique_ptr<std::string> generate_consensus(Graph &graph)
   {
     std::string consensus = graph.GenerateConsensus();
