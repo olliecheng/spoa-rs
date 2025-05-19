@@ -10,10 +10,9 @@ fn main() {
     };
 
     let dst = cmake::Config::new("spoa")
-        .uses_cxx11()
-        .define("spoa_install", "OFF")
         .define("spoa_build_exe", "OFF")
         .define("spoa_build_tests", "OFF")
+        .define("spoa_optimise_for_native", "ON")
         .define("spoa_use_simde", use_simde)
         .build();
     let lib64 = dst.join("lib64");
