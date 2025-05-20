@@ -9,10 +9,16 @@ fn main() {
         "OFF"
     };
 
+    let native = if std::env::var("CARGO_FEATURE_NONATIVE").is_ok() {
+        "OFF"
+    } else {
+        "ON"
+    };
+
     let dst = cmake::Config::new("spoa")
         .define("spoa_build_exe", "OFF")
         .define("spoa_build_tests", "OFF")
-        .define("spoa_optimise_for_native", "ON")
+        .define("spoa_optimize_for_native", native)
         .define("spoa_use_simde", use_simde)
         .build();
     let lib64 = dst.join("lib64");

@@ -11,6 +11,7 @@ links = "spoa"
 [features]
 default = []
 simde = []
+nonative = []
 
 [dependencies]
 cxx = "1.0.136"
@@ -19,3 +20,6 @@ cxx = "1.0.136"
 cmake = "0.1"
 cxx-build = "1.0.136"
 walkdir = "2"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(disablenative)'] }
