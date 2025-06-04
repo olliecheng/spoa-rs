@@ -75,5 +75,9 @@ pub mod ffi {
             sequence_len: u32,
             graph: &Graph,
         ) -> UniquePtr<Alignment>;
+
+        fn alignment_engine_type(
+            alignment_engine: Pin<&mut AlignmentEngine>,
+        ) -> UniquePtr<CxxString>;
     }
 }

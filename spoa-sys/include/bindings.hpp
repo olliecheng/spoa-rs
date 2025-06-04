@@ -23,6 +23,9 @@ namespace spoa
                                          std::uint32_t sequence_len,
                                          const Graph &graph);
 
+  std::unique_ptr<std::string>
+  alignment_engine_type(spoa::AlignmentEngine &engine);
+
   std::unique_ptr<spoa::Graph> create_graph();
 
   AlignmentResult add_alignment(spoa::Graph &graph,

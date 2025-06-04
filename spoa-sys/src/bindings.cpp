@@ -23,6 +23,13 @@ namespace spoa
     return std::unique_ptr<Alignment>(new Alignment(std::move(alignment)));
   }
 
+  std::unique_ptr<std::string> alignment_engine_type(AlignmentEngine &engine)
+  {
+    auto alignmentType = engine.AlignmentEngineType();
+    return std::unique_ptr<std::string>(
+        new std::string(std::move(alignmentType)));
+  }
+
   std::unique_ptr<Graph> create_graph()
   {
     return std::unique_ptr<Graph>(new Graph());

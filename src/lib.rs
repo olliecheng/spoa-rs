@@ -48,6 +48,15 @@ impl AlignmentEngine {
             )
         })
     }
+
+    pub fn alignment_engine_type(&mut self) -> String {
+        String::from_utf8(
+            ffi::alignment_engine_type(self.0.pin_mut())
+                .as_bytes()
+                .to_vec(),
+        )
+        .unwrap()
+    }
 }
 
 /// An opaque struct for the partial order alignment graph

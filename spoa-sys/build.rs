@@ -39,9 +39,12 @@ fn main() {
     println!("cargo:rerun-if-changed=include/bindings.hpp");
     println!("cargo:rerun-if-changed=src/bindings.cpp");
     println!("cargo:rerun-if-changed=src/lib.rs");
+    println!("cargo:rerun-if-changed=spoa/");
 
     cxx_build::bridge("src/lib.rs")
         .file("src/bindings.cpp")
+        .include("include")
+        .include(dst.join("include"))
         .std("c++17")
         .compile("spoa_sys");
 }
