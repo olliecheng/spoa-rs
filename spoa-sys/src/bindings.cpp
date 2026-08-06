@@ -30,6 +30,11 @@ namespace spoa
         new std::string(std::move(alignmentType)));
   }
 
+  std::uint64_t storage_size(AlignmentEngine &engine)
+  {
+    return engine.StorageSize();
+  }
+
   std::unique_ptr<Graph> create_graph()
   {
     return std::unique_ptr<Graph>(new Graph());

@@ -79,5 +79,7 @@ pub mod ffi {
         fn alignment_engine_type(
             alignment_engine: Pin<&mut AlignmentEngine>,
         ) -> UniquePtr<CxxString>;
+
+        fn storage_size(alignment_engine: Pin<&mut AlignmentEngine>) -> u64;
     }
 }

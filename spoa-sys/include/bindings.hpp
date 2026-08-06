@@ -26,6 +26,8 @@ namespace spoa
   std::unique_ptr<std::string>
   alignment_engine_type(spoa::AlignmentEngine &engine);
 
+  std::uint64_t storage_size(spoa::AlignmentEngine &engine);
+
   std::unique_ptr<spoa::Graph> create_graph();
 
   AlignmentResult add_alignment(spoa::Graph &graph,

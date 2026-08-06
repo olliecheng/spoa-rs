@@ -57,6 +57,14 @@ impl AlignmentEngine {
         )
         .unwrap()
     }
+
+    /// Size in bytes of the dynamic programming matrix allocated by this engine.
+    ///
+    /// The matrix is grown on demand by alignment and is never shrunk, so this
+    /// reports the high-water mark of the engine's working memory.
+    pub fn storage_size(&mut self) -> u64 {
+        ffi::storage_size(self.0.pin_mut())
+    }
 }
 
 /// An opaque struct for the partial order alignment graph
@@ -261,6 +269,27 @@ mod tests {
 
         let consensus = graph.consensus();
         assert!(consensus.as_bytes() == b"AATGCCCGTT");
+    }
+
+    #[test]
+    fn storage_size_grows_with_alignment() {
+        let mut eng = AlignmentEngine::new(AlignmentType::kNW, 5, -4, -3, -1, -3, -1);
+        let mut graph = Graph::new();
+
+        // a fresh engine has not allocated its DP matrix yet
+        assert_eq!(eng.storage_size(), 0);
+
+        for seq in SMALL_SEQS {
+            let qual = {
+                let mut qual = vec![34u8; seq.to_bytes().len()];
+                qual.push(0);
+                CString::from_vec_with_nul(qual).unwrap()
+            };
+            let aln = eng.align(seq, &graph);
+            graph.add_alignment(&aln, seq, &qual);
+        }
+
+        assert!(eng.storage_size() > 0);
     }
 
     #[test]
